@@ -52,6 +52,7 @@ export const Card = styled.div`
     flex-direction: column;
     justify-content: space-between;
     width: 260px;
+    min-height: 280px;
     padding: 16px;
     margin-right: 16px;
     background-color: #F8FAFB;
@@ -73,6 +74,7 @@ export const CardText = styled(CardTitle)`
 export const PostSection = styled.section`
     display: flex;
     justify-content: flex-start;
+    align-items: flex-start;
     padding: 16px;
 `
 export const CardBottom = styled.div`

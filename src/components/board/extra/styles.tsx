@@ -5,7 +5,7 @@ interface TProps {
 }
 
 export const Section = styled.section`
-    display: block;
+    overflow-y: scroll;
 `
 
 export const UserWrapper = styled.div`

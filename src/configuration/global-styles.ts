@@ -25,6 +25,11 @@ export default createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  
+  html {
+    -ms-overflow-style: none;  /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
    
   body {
      margin: 0;
@@ -32,8 +37,8 @@ export default createGlobalStyle`
   
   #root {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: left;
+    height: 100vh;
   }
   
   h2 {
@@ -43,4 +48,9 @@ export default createGlobalStyle`
     color: #324552;
     margin-left: 32px;
   }
+  
+  ::-webkit-scrollbar { /* chrome based */
+    width: 0;  /* ширина scrollbar'a */
+    background: transparent;  /* опционально */
+}
 `;

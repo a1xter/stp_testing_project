@@ -21,10 +21,8 @@ export const UserText = styled.div`
     margin-left: 8px;
 `
 export const NavSection = styled.section`
-    display: block;
-    overflow: hidden;
+    overflow-y: scroll;
     width: 190px;
-    min-height: 100vh;
     padding: 16px;
     background-color: #F8FAFB;
 `
