@@ -16,7 +16,10 @@ const PostsCard: React.FC<Props> = (props) => {
                 <sc.CardBottom>
                     <sc.CardText>Добавлен: {formatDistance(new Date(created_at), new Date(),{ locale: ru })}</sc.CardText>
                     <sc.CardText>Обновлен: {formatDistance(new Date(updated_at), new Date(),{ locale: ru })}</sc.CardText>
-                    <sc.Button onClick={() => {props.getPost(id)}}>Читать</sc.Button>
+                    <sc.Button onClick={() => {
+                        if (id != null) {
+                            props.getPost(id)
+                        }}}>Читать</sc.Button>
                 </sc.CardBottom>
             </sc.Card>
     )
