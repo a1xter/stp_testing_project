@@ -1,50 +1,39 @@
 import React, { useEffect, useState } from "react";
-import ApiService from "../../remote/api-service";
 import Comment from "../comments/comment";
 import * as sc from "./extra/styles"
+import {IComment, IPost} from "../../configuration/types";
 
 interface Props {
     postID: number;
+    setPost(id: number): void;
+    setComments(id: number): void;
+    post: IPost;
+    comments: IComment[];
 }
 
 const Post: React.FC<Props> = (props) => {
-    const [post, setPost] = useState({
-        title: '',
-        body: ''
-    });
-
-    const [comments, setComments] = useState([
-        {
-            body: '',
-            name: '',
-            email: '',
-            created_at: '',
-            id: null
-        }
-    ]);
 
     const [showComments, setShowComments] = useState(false)
 
-    const api = new ApiService();
-
     useEffect(() => {
-        api.getPost(props.postID).then(post => setPost(post));
-        api.getComments(props.postID).then((item) => setComments(item));
+        props.setPost(props.postID)
+        props.setComments(props.postID)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     return (
         <sc.Wrapper>
             <sc.Content>
                 <sc.TextWrapper>
-                    <sc.PostsTitle>{post.title}</sc.PostsTitle>
-                    <sc.PostsBody>{post.body}</sc.PostsBody>
+                    <sc.PostsTitle>{props.post.title}</sc.PostsTitle>
+                    <sc.PostsBody>{props.post.body}</sc.PostsBody>
                 </sc.TextWrapper>
 
-                {comments.length > 0 ?
+                {props.comments.length > 0 ?
                         showComments ?
                             <>
                                 <sc.PostsTitle>Комментарии:</sc.PostsTitle>
-                                {comments.map((comment) => {
+                                {props.comments.map((comment:IComment) => {
                                     return <Comment body={comment.body}
                                                     key={comment.id}
                                                     name={comment.name}

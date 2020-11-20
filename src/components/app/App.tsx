@@ -5,8 +5,10 @@ import Board from "../board/Board";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import PostsPage from "../posts/PostsPage";
 import Post from "../posts/Post";
+import {Store, StoreContext} from "../../configuration/store";
 
 const App: React.FC = () => {
+    const store: Store = React.useContext(StoreContext);
     return (
         <>
             <GlobalStyles/>
@@ -25,7 +27,11 @@ const App: React.FC = () => {
                                       userID = {match.params.id}/>
                 }}/>
                 <Route path={"/posts/:id/"} render={({ match }) => {
-                    return <Post postID = {match.params.id}/>
+                    return <Post postID = {match.params.id}
+                                 setPost={store.setPost}
+                                 setComments={store.setComments}
+                                 post={store.post}
+                                 comments={store.comments}/>
                 }}/>
             </Router>
         </>
