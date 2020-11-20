@@ -5,7 +5,6 @@ import {IComment, IPost, IUser} from "./types";
 
 const api = new ApiService();
 
-
 export class Store {
     usersPage = {
         pageCount: 67
@@ -59,14 +58,6 @@ export class Store {
 }
 
 const store = new Store();
-
-
-
-
-
-
-
-
 
 export const StoreContext = React.createContext(store);
 
