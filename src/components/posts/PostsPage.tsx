@@ -14,6 +14,7 @@ const PostsPage: React.FC<Props> = observer((props) => {
 
     useEffect(() => {
         store.setUsersPosts(props.userID)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getPost = (id: number) => {

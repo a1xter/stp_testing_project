@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { formatDistance } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import * as sc from "./extra/styles"
+import {action} from "mobx";
 
 interface Props {
     history: any;
@@ -18,11 +19,11 @@ const Board: React.FC<Props> = observer((props) => {
 
     useEffect(() => {
         store.getUsers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const setSelected = (id: number | null) => {
-        store.selectedID = id
-    }
+    const setSelected = action('setSelectedDone',
+        (id: number | null) => store.selectedID = id);
 
     const getUsersPosts = (id: number) => {
         props.history.push(`${id}/posts`);

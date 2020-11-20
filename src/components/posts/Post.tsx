@@ -18,6 +18,7 @@ const Post: React.FC<Props> = (props) => {
     useEffect(() => {
         props.setPost(props.postID)
         props.setComments(props.postID)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     return (
