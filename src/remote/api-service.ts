@@ -1,5 +1,6 @@
 export default class ApiService {
     private _apiBase = 'https://gorest.co.in/public-api';
+
     getResource = async (url: string) => {
         const res = await fetch(`${this._apiBase}${url}`);
 
@@ -10,12 +11,11 @@ export default class ApiService {
         return await res.json();
     }
 
-    async getAllUsers(page: number) {
-        const res = await this.getResource(`/users?page=${page}`);
-        return res.data;
+    getAllUsers = async (page: number) => {
+        return await this.getResource(`/users?page=${page}`);
     }
 
-    async getUsersPosts(id: number) {
+    getUsersPosts = async (id: number) => {
         const res = await this.getResource(`/users/${id}/posts`);
         return res.data;
     }
