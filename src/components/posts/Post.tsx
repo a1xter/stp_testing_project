@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import * as sc from "./extra/styles"
 import Comments from "../comments/Comments";
 
-interface PropsView {
-    postID: number;
-    getPost(id: number): Promise<any>;
-    getComments(id: number): Promise<any>;
-    state: any
-    setShowComments(): void;
-}
-
 interface Props {
     getPost(id: number): Promise<any>;
     postID: number;
     getComments(id: number): Promise<any>;
+}
+interface PropsView extends Props{
+    state: any
+    setShowComments(): void;
 }
 
 const Post: React.FC <PropsView> = (props) => {
@@ -40,7 +36,7 @@ const Post: React.FC <PropsView> = (props) => {
     )
 }
 
-const useData = (postID: number, getPost: (id: number) => Promise<any>, getComments: (id: number) => Promise<any>) =>   {
+const useData = (postID: number, getPost: (id: number) => Promise<any>, getComments: (id: number) => Promise<any>) =>       {
     const [state, setState] = useState({
         post: {
             title: '',
