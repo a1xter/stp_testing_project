@@ -1,8 +1,8 @@
-import React, { Component} from "react";
+import React, { useEffect, useState } from "react";
 import * as sc from "./extra/styles"
 import Comments from "../comments/Comments";
 
-interface Props {
+interface PropsView {
     postID: number;
     getPost(id: number): Promise<any>;
     getComments(id: number): Promise<any>;
@@ -10,13 +10,13 @@ interface Props {
     setShowComments(): void;
 }
 
-interface PropsView {
+interface Props {
     getPost(id: number): Promise<any>;
     postID: number;
     getComments(id: number): Promise<any>;
 }
 
-const Post: React.FC <Props> = (props) => {
+const Post: React.FC <PropsView> = (props) => {
     const {post: {body, title}, comments, showComments} = props.state;
 
     return (
@@ -40,49 +40,70 @@ const Post: React.FC <Props> = (props) => {
     )
 }
 
-const withData = (View: React.FC<Props>) => {
-    return class extends Component <PropsView> {
+const useData = (postID: number, getPost: (id: number) => Promise<any>, getComments: (id: number) => Promise<any>) =>   {
+    const [state, setState] = useState({
+        post: {
+            title: '',
+            body: ''
+        },
+        comments: [],
+        showComments: false,
+    });
 
-        state = {
-            post: {
-                title: '',
-                body: ''
-            },
-            comments: [],
-            showComments: false,
-        }
-
-        componentDidMount() {
-            const { getPost, postID, getComments } = this.props;
-            getPost(postID)
-                .then((post: any) => this.setState({
-                    post: {
-                        title: post.title,
-                        body: post.body
+    useEffect(() => {
+        let canceled = false;
+        getPost(postID)
+            .then((post: any) => {
+                !canceled && setState((state) => {
+                    return {
+                        ...state,
+                        post: {
+                            title: post.title,
+                            body: post.body
+                        }
                     }
-                }))
-            getComments(postID)
-                .then((comments: any) => this.setState({
-                    comments: comments
-                }))
-        }
+                })
+            })
 
-        setShowComments = () => {
-           this.setState({
-               showComments: true
+        getComments(postID)
+            .then((comments: any) => {
+                !canceled && setState((state) => {
+                    return {
+                        ...state,
+                        comments: comments
+                    }
+                })
+            })
+        return () => {canceled = true;}
+    }, [postID, getPost, getComments])
+
+    return {state, setState};
+}
+
+const withData = (View: React.FC<PropsView>) => {
+    return (props: Props) => {
+        const {postID, getPost, getComments} = props;
+        const data = useData(postID, getPost, getComments)
+
+
+        const setShowComments = () => {
+           data.setState((state) => {
+               return {
+                   ...state,
+                   showComments: true
+               }
            })
         }
 
-        render() {
-            if (!this.state.post.title || !this.state.post.body) {
-                return <div>Loading</div>
-            }
-            return <View postID = {this.props.postID}
-                         getPost = {this.props.getPost}
-                         getComments = {this.props.getComments}
-                         setShowComments={this.setShowComments}
-                         state={this.state}/>;
+        if (!data.state.post.title || !data.state.post.body) {
+            return <div>Loading</div>
         }
+
+        return <View postID = {props.postID}
+                     getPost = {props.getPost}
+                     getComments = {props.getComments}
+                     setShowComments={setShowComments}
+                     state={data.state}/>;
     }
 }
 
