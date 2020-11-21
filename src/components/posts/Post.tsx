@@ -1,7 +1,6 @@
 import React, { Component} from "react";
 import * as sc from "./extra/styles"
-import {IComment} from "../../configuration/types";
-import Comment from "../comments/comment";
+import Comments from "../comments/Comments";
 
 interface Props {
     postID: number;
@@ -41,33 +40,25 @@ class Post extends Component <Props> {
     render() {
         const {post: {body, title}} = this.state;
         const {comments, showComments} = this.state;
+
         if (!title || !body) {
             return <div>Loading</div>
         }
+
         return (
             <sc.Wrapper>
                 <sc.Content>
                     <sc.TextWrapper>
-                        <sc.PostsTitle>{title ? title : <div>No Data</div>}</sc.PostsTitle>
-                        <sc.PostsBody>{body ? body : <div>No Data</div>}</sc.PostsBody>
+                        <sc.PostsTitle>{ title ? title : <div>No Data</div> }</sc.PostsTitle>
+                        <sc.PostsBody>{ body ? body : <div>No Data</div> }</sc.PostsBody>
                     </sc.TextWrapper>
 
                     {comments && comments.length > 0 ?
                         showComments ?
-                            <>
-                                <sc.PostsTitle>Комментарии:</sc.PostsTitle>
-                                {comments.map((comment:IComment) => {
-                                    return <Comment body={comment.body}
-                                                    key={comment.id}
-                                                    name={comment.name}
-                                                    email={comment.email}
-                                                    created_at={comment.created_at} />
-                                })}
-                            </>
-                            :
-                            <sc.Button onClick={() => this.setShowComments()}>
-                                Показать комментарии
-                            </sc.Button>
+                            <Comments comments={comments}/>
+                            : <sc.Button onClick={() => this.setShowComments()}>
+                                    Показать комментарии
+                              </sc.Button>
                         : null}
 
                 </sc.Content>
