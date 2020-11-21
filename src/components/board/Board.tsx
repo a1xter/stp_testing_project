@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React  from "react";
 import UserRow from "./UserRow";
 import {Store, StoreContext} from "../../configuration/store";
 import { IUser } from "../../configuration/types";
@@ -16,11 +16,6 @@ interface Props {
 
 const Board: React.FC<Props> = observer((props) => {
     const store: Store = React.useContext(StoreContext);
-
-    useEffect(() => {
-        store.getUsers();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const setSelected = action('setSelectedDone',
         (id: number | null) => store.selectedID = id);

@@ -9,8 +9,8 @@ export interface IUser {
 }
 
 export interface IPost {
-    id?: number;
-    user_id?: number;
+    id: number;
+    user_id: number;
     title: string;
     body: string;
     created_at: string;

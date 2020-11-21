@@ -1,23 +1,19 @@
-import React, { useEffect } from "react";
-import Posts from "./PostsCard";
+import React from "react";
+import PostsCard from "./PostsCard";
 import {Store, StoreContext} from "../../configuration/store";
 import { observer } from "mobx-react"
 import { PostSection } from "./extra/styles";
 
 interface Props {
-    userID: number;
     history: any
 }
 
 const PostsPage: React.FC<Props> = observer((props) => {
     const store: Store = React.useContext(StoreContext);
 
-    useEffect(() => {
-        store.setUsersPosts(props.userID)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const getPost = (id: number) => {
+    const getPost = async (id: number) => {
+        // await store.setPost(id);
+        // await store.setComments(id)
         props.history.push(`/posts/${id}`);
     }
 
@@ -25,7 +21,7 @@ const PostsPage: React.FC<Props> = observer((props) => {
         <PostSection>
             {store.usersPosts.length > 0 ? store.usersPosts.map((post) => {
                 return (
-                    <Posts id={post.id}
+                    <PostsCard id={post.id}
                            key={post.id}
                            getPost={ getPost }
                            user_id={post.user_id}

@@ -1,39 +1,62 @@
-import React, { useEffect, useState } from "react";
-import Comment from "../comments/comment";
+import React, { Component} from "react";
 import * as sc from "./extra/styles"
-import {IComment, IPost} from "../../configuration/types";
+import {IComment} from "../../configuration/types";
+import Comment from "../comments/comment";
 
 interface Props {
     postID: number;
-    setPost(id: number): void;
-    setComments(id: number): void;
-    post: IPost;
-    comments: IComment[];
+    getPost(id: number): Promise<any>;
+    getComments(id: number): Promise<any>;
 }
 
-const Post: React.FC<Props> = (props) => {
+class Post extends Component <Props> {
+    state = {
+        post: {
+            title: '',
+            body: ''
+        },
+        comments: [],
+        showComments: false,
+    }
 
-    const [showComments, setShowComments] = useState(false)
+    componentDidMount() {
+        const { getPost, postID, getComments } = this.props;
+        getPost(postID)
+            .then(post => this.setState({
+                post: {
+                    title: post.title,
+                    body: post.body
+                }
+            }))
+        getComments(postID)
+            .then(comments => this.setState({
+                comments: comments
+            }))
+    }
 
-    useEffect(() => {
-        props.setPost(props.postID)
-        props.setComments(props.postID)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+    setShowComments() {
+        this.setState({showComments: true})
+    }
 
-    return (
-        <sc.Wrapper>
-            <sc.Content>
-                <sc.TextWrapper>
-                    <sc.PostsTitle>{props.post.title}</sc.PostsTitle>
-                    <sc.PostsBody>{props.post.body}</sc.PostsBody>
-                </sc.TextWrapper>
+    render() {
+        const {post} = this.state;
+        const {comments, showComments} = this.state;
+        if (!post.title || !post.body) {
+            return <div>Loading</div>
+        }
+        return (
+            <sc.Wrapper>
+                <sc.Content>
+                    <sc.TextWrapper>
+                        <sc.PostsTitle>{post.title ? post.title : <div>No Data</div>}</sc.PostsTitle>
+                        <sc.PostsBody>{post.body ? post.body : <div>No Data</div>}</sc.PostsBody>
+                    </sc.TextWrapper>
 
-                {props.comments.length > 0 ?
+                    {comments && comments.length > 0 ?
                         showComments ?
                             <>
                                 <sc.PostsTitle>Комментарии:</sc.PostsTitle>
-                                {props.comments.map((comment:IComment) => {
+                                {comments.map((comment:IComment) => {
                                     return <Comment body={comment.body}
                                                     key={comment.id}
                                                     name={comment.name}
@@ -41,12 +64,16 @@ const Post: React.FC<Props> = (props) => {
                                                     created_at={comment.created_at} />
                                 })}
                             </>
-                        : <sc.Button onClick={() => setShowComments(!showComments)}>Показать комментарии</sc.Button>
-                    : null}
+                            :
+                            <sc.Button onClick={() => this.setShowComments()}>
+                                Показать комментарии
+                            </sc.Button>
+                        : null}
 
-            </sc.Content>
-        </sc.Wrapper>
-    )
+                </sc.Content>
+            </sc.Wrapper>
+        )
+    }
 }
 
 export default Post;
