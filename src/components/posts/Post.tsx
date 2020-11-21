@@ -39,17 +39,17 @@ class Post extends Component <Props> {
     }
 
     render() {
-        const {post} = this.state;
+        const {post: {body, title}} = this.state;
         const {comments, showComments} = this.state;
-        if (!post.title || !post.body) {
+        if (!title || !body) {
             return <div>Loading</div>
         }
         return (
             <sc.Wrapper>
                 <sc.Content>
                     <sc.TextWrapper>
-                        <sc.PostsTitle>{post.title ? post.title : <div>No Data</div>}</sc.PostsTitle>
-                        <sc.PostsBody>{post.body ? post.body : <div>No Data</div>}</sc.PostsBody>
+                        <sc.PostsTitle>{title ? title : <div>No Data</div>}</sc.PostsTitle>
+                        <sc.PostsBody>{body ? body : <div>No Data</div>}</sc.PostsBody>
                     </sc.TextWrapper>
 
                     {comments && comments.length > 0 ?
